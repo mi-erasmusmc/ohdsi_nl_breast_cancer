@@ -1,0 +1,4 @@
+studyId: "CohortDiagnosticsTemplate"
+studyTitle: "Run Cohort Diagnostics"
+engine: "executionengine.azurecr.io/darwin-cohort-diagnostics:v0.1"
+entrypoint: "CohortDiagnosticsTemplate/CodeToRun-DarwinExecutionEngine.R"

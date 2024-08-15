@@ -2,6 +2,8 @@
 
 # renv::restore()
 
+print(paste("working directory:"), getwd())
+
 # These environment variables are pass in by Arachne
 dbms   <- Sys.getenv("DBMS_TYPE")
 connectionString <- Sys.getenv("CONNECTION_STRING")
@@ -33,7 +35,6 @@ vars <- c(DBMS_TYPE = dbms,
           DBMS_PASSWORD = password, 
           RESULT_SCHEMA = cohortDatabaseSchema,
           CDM_SCHEMA = cdmDatabaseSchema,
-          RESULT_SCHEMA = cohortDatabaseSchema,
           DB_NAME = databaseId)
 
 print(vars)
