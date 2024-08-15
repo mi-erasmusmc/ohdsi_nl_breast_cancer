@@ -1,6 +1,6 @@
 # Run this script in Arachne 
 
-renv::restore()
+# renv::restore()
 
 # These environment variables are pass in by Arachne
 dbms   <- Sys.getenv("DBMS_TYPE")
@@ -14,13 +14,12 @@ databaseId <- Sys.getenv("DB_NAME")
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 connectionString = connectionString,
                                                                 user = user,
-                                                                password = password,
-                                                                port = port)
+                                                                password = password)
 
 connection <- DatabaseConnector::connect(connectionDetails)
 
 test <- DatabaseConnector::renderTranslateQuerySql(
-  con, 
+  connection, 
   "select count(*) as n_persons from @cdmDatabaseSchema.person",
   cdmDatabaseSchema = cdmDatabaseSchema)
 

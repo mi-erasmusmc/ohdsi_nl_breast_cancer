@@ -1,0 +1,7 @@
+# build docker image for this module
+
+export GITHUB_PAT="ghp_..."
+docker build --build-arg GITHUB_PAT=$GITHUB_PAT -t executionengine.azurecr.io/darwin-cohort-diagnostics:v0.1 . --progress=plain 
+
+docker login -u ee-admin-token -p {...} executionengine.azurecr.io
+docker push executionengine.azurecr.io/darwin-cohort-diagnostics:v0.1
