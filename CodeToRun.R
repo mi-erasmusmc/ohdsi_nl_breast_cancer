@@ -2,12 +2,14 @@
 renv::restore()
 
 # 2. Edit the variables below to create a connection and run CohortDiagnostics
-dbms <- Sys.getenv("dbms")
-host <- Sys.getenv("host")
-dbname <- Sys.getenv("dbname")
-user <- Sys.getenv("user")
-password <- Sys.getenv("password")
-port <- Sys.getenv("port")
+
+#  postgresql", "snowflake", "spark", and "redshift", "sql server"
+dbms <- "postgresql"
+host <- Sys.getenv("CDM5_POSTGRESQL_HOST")
+dbname <- Sys.getenv("CDM5_POSTGRESQL_DBNAME")
+user <- Sys.getenv("CDM5_POSTGRESQL_USER")
+password <-  Sys.getenv("CDM5_POSTGRESQL_PASSWORD")
+port <- Sys.getenv("CDM5_POSTGRESQL_PORT")
 
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 server = paste0(host, "/", dbname),
@@ -19,63 +21,49 @@ connection <- DatabaseConnector::connect(connectionDetails)
 
 
 # The database schema where the observational data in CDM is located
-cdmDatabaseSchema <- "..."
+cdmDatabaseSchema <- Sys.getenv("CDM5_POSTGRESQL_CDM_SCHEMA")
 
 # The database schema where the cohorts can be instantiated
-cohortDatabaseSchema <- "..."
+cohortDatabaseSchema <- Sys.getenv("CDM5_POSTGRESQL_SCRATCH_SCHEMA")
 
 # The name of the table that will be created in the cohortDatabaseSchema
-cohortTable <- "..."
+cohortTable <- paste0("tmp_cohort_", as.integer(Sys.time()) %% 10000)
 
 # A folder with cohorts
-cohortsFolder <- "..."
-
-# A folder on the local file system to store results
-outputDir <- "..."
+cohortsFolder <- here::here("inst", "cohorts")
 
 # The databaseId is a short (<= 20 characters)
-databaseId <- "..."
+databaseId <- "YOUR_DATABASE_ID"
 
-# Using an ExternalConceptCountsTable ------------------------
+# A folder on the local file system to store results
+outputDir <- here::here(paste("p3-c1-010-results-", databaseId))
 
-# If using the DARWIN version of CohortDiagnostics you can create in advance the concept_counts table
+# test connection details ----
+connection <- DatabaseConnector::connect(connectionDetails)
 
-# 1. Create the conceptCountsTable in the cohortDatabaseSchema
-CohortDiagnostics::createConceptCountsTable(connectionDetails = connectionDetails,
-                                            connection = NULL,
-                                            cdmDatabaseSchema = cdmDatabaseSchema,
-                                            tempEmulationSchema = NULL,
-                                            conceptCountsDatabaseSchema = cohortDatabaseSchema,
-                                            conceptCountsTable = "concept_counts",
-                                            conceptCountsTableIsTemp = FALSE,
-                                            removeCurrentTable = TRUE)
+test <- DatabaseConnector::renderTranslateQuerySql(
+  connection, 
+  "select count(*) as n_persons from @cdmDatabaseSchema.person",
+  cdmDatabaseSchema = cdmDatabaseSchema) |> dplyr::pull(1)
 
-# 2. Set useExternalConceptCountsTable = TRUE if created.
-#    - Provide the name of the table witn conceptCountsTable = "concept_counts"
-# 	 - Or just set useExternalConceptCountsTable = "achilles" to use the counts in the CDM
-CohortDiagnosticsRenv::runDiagnostics(connectionDetails = connectionDetails,
-                                      cdmDatabaseSchema = cdmDatabaseSchema,
-                                      vocabularyDatabaseSchema = cdmDatabaseSchema,
-                                      cohortDatabaseSchema = cohortDatabaseSchema,
-                                      cohortTable = cohortTable,
-                                      cohortsFolder = cohortsFolder,
-                                      outputDir = outputDir,
-                                      databaseId = databaseId,
-                                      useExternalConceptCountsTable = TRUE,
-                                      conceptCountsTable = "concept_counts")
+print(paste(test, "persons in the cdm database"))
+DatabaseConnector::disconnect(connection)
 
-# 3. If not using an ExternalConceptCountsTable, CohortDiagnostics can be run as default
-CohortDiagnosticsRenv::runDiagnostics(connectionDetails = connectionDetails,
-                                      cdmDatabaseSchema = cdmDatabaseSchema,
-                                      vocabularyDatabaseSchema = cdmDatabaseSchema,
-                                      cohortDatabaseSchema = cohortDatabaseSchema,
-                                      cohortTable = cohortTable,
-                                      cohortsFolder = cohortsFolder,
-                                      outputDir = outputDir,
-                                      databaseId = databaseId)
+# setup output folder and log -----
+if (!file.exists(outputDir)) {
+  dir.create(outputDir, recursive = TRUE)
+}
 
-# 4. (Optionally) to view the results locally:
-CohortDiagnostics::createMergedResultsFile(dataFolder = file.path(outputDir),
-                                           sqliteDbPath = file.path(outputDir, "MergedCohortDiagnosticsData.sqlite"))
+source(here::here("runCohortDiagnostics.R"))
 
-CohortDiagnostics::launchDiagnosticsExplorer(sqliteDbPath = file.path(outputDir, "MergedCohortDiagnosticsData.sqlite"))
+
+# Review and return the csv files in the output folder
+
+# To view the shiny app run the following code
+
+# CohortDiagnostics::createMergedResultsFile(dataFolder = outputDir,
+#                                            sqliteDbPath = file.path(outputDir, "MergedCohortDiagnosticsData.sqlite"))
+# 
+# CohortDiagnostics::launchDiagnosticsExplorer(sqliteDbPath = file.path(outputDir, "MergedCohortDiagnosticsData.sqlite"))
+
+
