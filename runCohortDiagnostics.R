@@ -32,7 +32,8 @@ CohortGenerator::exportCohortStatsTables(
   connectionDetails = connectionDetails,
   cohortDatabaseSchema = cohortDatabaseSchema,
   cohortTableNames = cohortTableNames,
-  cohortStatisticsFolder = outputDir
+  cohortStatisticsFolder = outputDir,
+  cohortDefinitionSet = cohortDefinitionSet
 )
 
 # run diagnostics ----
