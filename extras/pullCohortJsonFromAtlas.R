@@ -9,7 +9,7 @@ baseUrl <- "https://atlas-dev.darwin-eu.org/WebAPI"
 
 # copy the browser token from the browser following the instructions here: 
 # https://ohdsi.github.io/ROhdsiWebApi/articles/authenticationSecurity.html
-token <- "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhLmJsYWNrQGRhcndpbi1ldS5vcmciLCJTZXNzaW9uLUlEIjpudWxsLCJleHAiOjE3MjI4OTMxOTd9.zYb_35nROT1mwL_Fr9hQPfq9Pq5G74umXOkcq5KeXElutRGIVyPzgE03yMm3_xa3phpaQ7GLWgtU55Id5Kx5nA"
+token <- "Bearer ...."
 
 setAuthHeader(baseUrl, authHeader = token)
 
