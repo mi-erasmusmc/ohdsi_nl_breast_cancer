@@ -1,5 +1,15 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
 
 # OHDSI NL Breast Cancer Study — Cohort Diagnostics
 
@@ -12,28 +22,26 @@ A `CodeToRun.R` is provided in the extras folder.
 
 # Installation
 
-1.  See the instructions at <https://ohdsi.github.io/Hades/rSetup.html>
-    for configuring your R environment, including Java and RStudio.
+1. See the instructions at https://ohdsi.github.io/Hades/rSetup.html for configuring your R environment, including Java and RStudio.
 
-2.  Download this project and run it in the same directory.
+2. Download this project and run it in the same directory.
 
-3.  Execute the following R code for the environment:
+5. Execute the following R code for the environment:
 
 # Install the latest version of renv:
 
-``` r
+```R
 install.packages("renv")
 ```
 
 # Build the local library. This may take a while:
-
-``` r
+```R
 renv::init()
 ```
 
 # Restore the library
 
-``` r
+```R
 renv::restore()
 ```
 
@@ -41,7 +49,7 @@ renv::restore()
 
 Edit the variables below to the correct values for your environment:
 
-``` r
+```R
 # 1. Open this project in RStudio and restore the R environment
 renv::restore()
 
@@ -100,7 +108,7 @@ if (!file.exists(outputDir)) {
 
 source(here::here("runCohortDiagnostics.R"))
 ```
-
 # 3. Upload the results to the DTZ
 
 Please upload the zip file.
+
