@@ -4,12 +4,12 @@ renv::restore()
 # 2. Edit the variables below to create a connection and run CohortDiagnostics
 
 #  postgresql", "snowflake", "spark", and "redshift", "sql server"
-dbms <- "postgresql"
-host <- Sys.getenv("CDM5_POSTGRESQL_HOST")
-dbname <- Sys.getenv("CDM5_POSTGRESQL_DBNAME")
-user <- Sys.getenv("CDM5_POSTGRESQL_USER")
-password <-  Sys.getenv("CDM5_POSTGRESQL_PASSWORD")
-port <- Sys.getenv("CDM5_POSTGRESQL_PORT")
+dbms <- "..."
+host <- Sys.getenv("...")
+dbname <- Sys.getenv("...")
+user <- Sys.getenv("...")
+password <-  Sys.getenv("...")
+port <- Sys.getenv("...")
 
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = dbms,
                                                                 server = paste0(host, "/", dbname),
@@ -21,10 +21,10 @@ connection <- DatabaseConnector::connect(connectionDetails)
 
 
 # The database schema where the observational data in CDM is located
-cdmDatabaseSchema <- Sys.getenv("CDM5_POSTGRESQL_CDM_SCHEMA")
+cdmDatabaseSchema <- "..."
 
 # The database schema where the cohorts can be instantiated
-cohortDatabaseSchema <- Sys.getenv("CDM5_POSTGRESQL_SCRATCH_SCHEMA")
+cohortDatabaseSchema <- "..."
 
 # The name of the table that will be created in the cohortDatabaseSchema
 cohortTable <- paste0("tmp_cohort_", as.integer(Sys.time()) %% 10000)
@@ -36,7 +36,7 @@ cohortsFolder <- here::here("inst", "cohorts")
 databaseId <- "YOUR_DATABASE_ID"
 
 # A folder on the local file system to store results
-outputDir <- here::here(paste("p3-c1-010-results-", databaseId))
+outputDir <- here::here(paste("results", databaseId))
 
 # test connection details ----
 connection <- DatabaseConnector::connect(connectionDetails)

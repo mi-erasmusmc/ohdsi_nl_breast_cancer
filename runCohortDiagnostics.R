@@ -3,6 +3,25 @@ ParallelLogger::addDefaultErrorReportLogger(file.path(outputDir, "errorReportR.t
 
 # generate cohorts ----
 ParallelLogger::logInfo("Creating cohorts")
+
+cohortsToCreate <- CohortGenerator::createEmptyCohortDefinitionSet()
+
+# Fill the cohort set using  cohorts included in this 
+# package as an example
+cohortDefinitionSet <- list.files(path = "inst/cohorts", full.names = TRUE)
+for (i in 1:length(cohortJsonFiles)) {
+  cohortJsonFileName <- cohortJsonFiles[i]
+  cohortName <- tools::file_path_sans_ext(basename(cohortJsonFileName))
+  cohortJson <- readChar(cohortJsonFileName, file.info(cohortJsonFileName)$size)
+  cohortExpression <- CirceR::cohortExpressionFromJson(cohortJson)
+  cohortSql <- CirceR::buildCohortQuery(cohortExpression, options = CirceR::createGenerateOptions(generateStats = FALSE))
+  cohortDefinitionSet <- rbind(cohortsToCreate, data.frame(cohortId = as.numeric(i),
+                                                           cohortName = cohortName,
+                                                           json = cohortJson,
+                                                           sql = cohortSql,
+                                                           stringsAsFactors = FALSE))
+}
+
 cohortTableNames <- CohortGenerator::getCohortTableNames(cohortTable = cohortTable)
 
 CohortGenerator::createCohortTables(
@@ -10,14 +29,6 @@ CohortGenerator::createCohortTables(
   cohortTableNames = cohortTableNames,
   cohortDatabaseSchema = cohortDatabaseSchema,
   incremental = FALSE
-)
-
-cohortDefinitionSet <- CohortGenerator::getCohortDefinitionSet(
-  settingsFileName = here::here("inst", "cohortsToCreate.csv"),
-  jsonFolder = here::here("inst", "cohorts"),
-  sqlFolder = here::here("inst", "sql", "sql_server"),
-  cohortFileNameValue = "cohortName"
-  
 )
 
 CohortGenerator::generateCohortSet(
@@ -33,7 +44,6 @@ CohortGenerator::exportCohortStatsTables(
   cohortDatabaseSchema = cohortDatabaseSchema,
   cohortTableNames = cohortTableNames,
   cohortStatisticsFolder = outputDir,
-  cohortDefinitionSet = cohortDefinitionSet
 )
 
 # run diagnostics ----
@@ -48,7 +58,7 @@ temporalCovariateSettings <- FeatureExtraction::createTemporalCovariateSettings(
   useDemographicsPostObservationTime = TRUE,
   useDemographicsTimeInCohort = TRUE,
   useConditionOccurrence = TRUE,
-  useProcedureOccurrence = FALSE,
+  useProcedureOccurrence = TRUE,
   useDrugEraStart = TRUE,
   useMeasurement = TRUE,
   useDrugExposure = TRUE,
@@ -72,7 +82,7 @@ CohortDiagnostics::executeDiagnostics(
   runIncludedSourceConcepts = TRUE,
   runOrphanConcepts = TRUE,
   runTimeSeries = TRUE,
-  runVisitContext = FALSE,
+  runVisitContext = TRUE,
   runBreakdownIndexEvents = TRUE,
   runIncidenceRate = TRUE,
   runCohortRelationship = TRUE,

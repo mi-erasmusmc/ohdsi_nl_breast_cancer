@@ -7,6 +7,5 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(CohortDiagnosticsRenv)
 
 test_check("CohortDiagnosticsRenv")
