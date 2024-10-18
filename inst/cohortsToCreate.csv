@@ -1,2 +1,10 @@
 atlasId,cohortId,cohortName
 1,1,IncidentBreastCancer
+1790368,1790368,ohdsi_nl_breast_cancer
+1790446,1790446,ohdsi_nl_breast_cancer_malignant_tumor_of_breast
+1790362,1790362,ohdsi_nl_breast_cancer_targeted_drug_therapy
+1790363,1790363,ohdsi_nl_breast_cancer_hormone_therapy
+1790364,1790364,ohdsi_nl_breast_cancer_immunotherapy
+1790365,1790365,ohdsi_nl_breast_cancer_radiotherapy
+1790366,1790366,ohdsi_nl_breast_cancer_surgery
+1790367,1790367,ohdsi_nl_breast_cancer_chemotherapy

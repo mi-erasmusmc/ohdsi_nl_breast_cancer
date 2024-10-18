@@ -4,11 +4,11 @@ ParallelLogger::addDefaultErrorReportLogger(file.path(outputDir, "errorReportR.t
 # generate cohorts ----
 ParallelLogger::logInfo("Creating cohorts")
 
-cohortsToCreate <- CohortGenerator::createEmptyCohortDefinitionSet()
+cohortDefinitionSet <- CohortGenerator::createEmptyCohortDefinitionSet()
 
 # Fill the cohort set using  cohorts included in this 
 # package as an example
-cohortDefinitionSet <- list.files(path = "inst/cohorts", full.names = TRUE)
+cohortJsonFiles <- list.files(path = "inst/cohorts", full.names = TRUE)
 for (i in 1:length(cohortJsonFiles)) {
   cohortJsonFileName <- cohortJsonFiles[i]
   cohortName <- tools::file_path_sans_ext(basename(cohortJsonFileName))
