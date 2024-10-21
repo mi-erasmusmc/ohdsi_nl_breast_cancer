@@ -15,7 +15,7 @@ for (i in 1:length(cohortJsonFiles)) {
   cohortJson <- readChar(cohortJsonFileName, file.info(cohortJsonFileName)$size)
   cohortExpression <- CirceR::cohortExpressionFromJson(cohortJson)
   cohortSql <- CirceR::buildCohortQuery(cohortExpression, options = CirceR::createGenerateOptions(generateStats = FALSE))
-  cohortDefinitionSet <- rbind(cohortsToCreate, data.frame(cohortId = as.numeric(i),
+  cohortDefinitionSet <- rbind(cohortDefinitionSet, data.frame(cohortId = as.numeric(i),
                                                            cohortName = cohortName,
                                                            json = cohortJson,
                                                            sql = cohortSql,
